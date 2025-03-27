@@ -59,6 +59,8 @@ class StandardAbsoluteDeviation(anomaly.base.AnomalyDetector):
     """
 
     def __init__(self, sub_stat: str = "mean"):
+        # Fix mypy error: subtracted_statistic_estimator can be either stats.Mean or stats.Quantile
+        self.subtracted_statistic_estimator: Union[stats.Mean, stats.Quantile]
         self.variance = stats.Var()
         self.sub_stat = sub_stat
 
