@@ -14,8 +14,7 @@ class SymmetricMatrix(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def matrix(self):
-        ...
+    def matrix(self): ...
 
     def __getitem__(self, key):
         """

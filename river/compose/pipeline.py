@@ -335,11 +335,13 @@ class Pipeline(base.Estimator):
 
         return self.__class__(
             *[
-                (name, new_params[name])
-                if isinstance(new_params.get(name), base.Estimator)
-                else (
-                    name,
-                    step.clone(new_params.get(name, {}), include_attributes=include_attributes),
+                (
+                    (name, new_params[name])
+                    if isinstance(new_params.get(name), base.Estimator)
+                    else (
+                        name,
+                        step.clone(new_params.get(name, {}), include_attributes=include_attributes),
+                    )
                 )
                 for name, step in self.steps.items()
             ]

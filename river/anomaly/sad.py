@@ -88,6 +88,6 @@ class StandardAbsoluteDeviation(anomaly.base.AnomalyDetector):
         if est is None:
             est = 0.0
         var = self.variance.get()
-        score = (x_value - est) / (var ** 0.5 + 1e-10)
+        score = (x_value - est) / (var**0.5 + 1e-10)
 
         return abs(score)

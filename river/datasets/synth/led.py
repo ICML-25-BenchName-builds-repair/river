@@ -83,9 +83,11 @@ class LED(datasets.base.SyntheticDataset):
         irrelevant_features: bool = False,
     ):
         super().__init__(
-            n_features=self._N_FEATURES_INCLUDING_NOISE
-            if irrelevant_features
-            else self._N_RELEVANT_FEATURES,
+            n_features=(
+                self._N_FEATURES_INCLUDING_NOISE
+                if irrelevant_features
+                else self._N_RELEVANT_FEATURES
+            ),
             n_classes=10,
             n_outputs=1,
             task=datasets.base.MULTI_CLF,

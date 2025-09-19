@@ -122,20 +122,20 @@ def simulate_qa(
     get_moment = (
         (lambda _, x: x[moment])
         if isinstance(moment, str)
-        else (lambda _, x: moment(x))  # type: ignore
-        if callable(moment)
-        else (lambda i, _: i)  # type: ignore
+        else (
+            (lambda _, x: moment(x)) if callable(moment) else (lambda i, _: i)  # type: ignore
+        )  # type: ignore
     )
 
     # Coerce delay to a function
     get_delay = (
         (lambda i, _: 0)
         if delay is None
-        else (lambda x, _: x[delay])
-        if isinstance(delay, str)
-        else (lambda _, __: delay)  # type: ignore
-        if not callable(delay)
-        else delay  # type: ignore
+        else (
+            (lambda x, _: x[delay])
+            if isinstance(delay, str)
+            else (lambda _, __: delay) if not callable(delay) else delay  # type: ignore
+        )  # type: ignore
     )
 
     mementos: list[Memento] = []
@@ -157,10 +157,14 @@ def simulate_qa(
                 break
 
             # Reveal the ground truth and pop the observation from the queue
-            yield (i_old, x_old, y_old, kwargs_old) if kwargs_old else (
-                i_old,
-                x_old,
-                y_old,
+            yield (
+                (i_old, x_old, y_old, kwargs_old)
+                if kwargs_old
+                else (
+                    i_old,
+                    x_old,
+                    y_old,
+                )
             )
             del mementos[0]
 
@@ -170,8 +174,12 @@ def simulate_qa(
         yield (i, x, None, kwargs) if kwargs else (i, x, None)
 
     for memento in mementos:
-        yield (memento.i, memento.x, memento.y, memento.kwargs) if memento.kwargs else (
-            memento.i,
-            memento.x,
-            memento.y,
+        yield (
+            (memento.i, memento.x, memento.y, memento.kwargs)
+            if memento.kwargs
+            else (
+                memento.i,
+                memento.x,
+                memento.y,
+            )
         )

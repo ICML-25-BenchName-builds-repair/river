@@ -166,9 +166,11 @@ class BernoulliNB(base.BaseNB):
                 map(
                     math.log,
                     (
-                        10e-10 + self.p_feature_given_class(f, c)
-                        if f in x and x[f] > self.true_threshold
-                        else 10e-10 + (1.0 - self.p_feature_given_class(f, c))
+                        (
+                            10e-10 + self.p_feature_given_class(f, c)
+                            if f in x and x[f] > self.true_threshold
+                            else 10e-10 + (1.0 - self.p_feature_given_class(f, c))
+                        )
                         for f in self.feature_counts
                     ),
                 )
