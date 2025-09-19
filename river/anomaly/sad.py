@@ -62,6 +62,8 @@ class StandardAbsoluteDeviation(anomaly.base.AnomalyDetector):
         self.variance = stats.Var()
         self.sub_stat = sub_stat
 
+        # Use a common base type to satisfy the type checker
+        self.subtracted_statistic_estimator: stats.base.Univariate
         if self.sub_stat == "mean":
             self.subtracted_statistic_estimator = stats.Mean()
         elif self.sub_stat == "median":
@@ -82,8 +84,10 @@ class StandardAbsoluteDeviation(anomaly.base.AnomalyDetector):
         assert len(x) == 1
         ((x_key, x_value),) = x.items()
 
-        score = (x_value - self.subtracted_statistic_estimator.get()) / (
-            self.variance.get() ** 0.5 + 1e-10
-        )
+        est = self.subtracted_statistic_estimator.get()
+        if est is None:
+            est = 0.0
+        var = self.variance.get()
+        score = (x_value - est) / (var ** 0.5 + 1e-10)
 
         return abs(score)
